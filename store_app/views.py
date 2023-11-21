@@ -1,11 +1,10 @@
-from rest_framework.generics import ListCreateAPIView
+
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 
-
-from store_app.models import Product, Review
-from store_app.serializers import ProductSerializer, ReviewSerializer
+from store_app.models import Product, Review, Comment
+from store_app.serializers import ProductSerializer, ReviewSerializer, CommentSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -24,6 +23,16 @@ class ProductViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all().order_by('-id')
     serializer_class = ReviewSerializer
+    pagination_class = PageNumberPagination
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all().order_by('-id')
+    serializer_class = CommentSerializer
     pagination_class = PageNumberPagination
     permission_classes = [IsAuthenticatedOrReadOnly]
 

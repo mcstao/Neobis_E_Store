@@ -9,9 +9,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    comment_text = serializers.CharField(min_length=1)
+    product_comments_id = serializers.IntegerField()
+
     class Meta:
         model = Comment
-        fields = ['id', 'username', 'comment_text', 'author']
+        fields = ['id', 'product_comments_id', 'comment_text', 'author']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -26,8 +29,9 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, required=False)
+    comments = CommentSerializer(many=True, required=False)
 
     class Meta:
         model = Product
         fields = ['id', 'author', 'image', 'product_name', 'description', 'price', 'category', 'reviews', 'rating',
-                  'created_time', 'modified_time']
+                  'created_time', 'modified_time', 'comments']

@@ -35,8 +35,9 @@ class Product(models.Model):
 
 
 class UserInfo(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User,related_name='userinfo', on_delete=models.CASCADE)
     address = models.CharField(max_length=150, verbose_name='Адресс')
+    REQUIRED_FIELDS = ['address']
 
     def __str__(self):
         return self.user.username
