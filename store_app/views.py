@@ -1,10 +1,10 @@
-
+from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 
-from store_app.models import Product, Review, Comment
-from store_app.serializers import ProductSerializer, ReviewSerializer, CommentSerializer
+from store_app.models import Product, Review, Comment, Category
+from store_app.serializers import ProductSerializer, ReviewSerializer, CommentSerializer, CategorySerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -38,3 +38,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class CategoryView(ListAPIView):
+    queryset = Category.objects.all().order_by('id')
+    serializer_class = CategorySerializer
